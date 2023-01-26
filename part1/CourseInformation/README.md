@@ -1,1 +1,1 @@
-completed exercises 1.1 amd 1.2
+completed exercises 1.1 and 1.2
