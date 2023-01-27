@@ -1,4 +1,3 @@
-import { type } from '@testing-library/user-event/dist/type';
 import { useState } from 'react'
 
 const Button = (props) => {
@@ -8,7 +7,7 @@ const Button = (props) => {
   )
 }
 
-const DisplayFeedback = (props) => <p>{props.text} {props.value}</p>
+const StatisticLine = (props) => <p>{props.text} {props.value}</p>
 
 const Statistics = (props) => {
   const {good, neutral, bad} = props;
@@ -18,12 +17,12 @@ const Statistics = (props) => {
     return (
       <div>
         <h1>Statistics</h1>
-        <DisplayFeedback text="Good" value={good} />
-        <DisplayFeedback text="Neutral" value={neutral} />
-        <DisplayFeedback text="Bad" value={bad} />
-        <DisplayFeedback text="All" value={totalFeedback} />
-        <DisplayFeedback text="Average" value={totalFeedback > 0? (good - bad)/totalFeedback : 0} />
-        <DisplayFeedback text="Positive" value={totalFeedback > 0? (good/totalFeedback)*100 + '%' : 0 + '%'} />
+        <StatisticLine text="Good" value={good} />
+        <StatisticLine text="Neutral" value={neutral} />
+        <StatisticLine text="Bad" value={bad} />
+        <StatisticLine text="All" value={totalFeedback} />
+        <StatisticLine text="Average" value={totalFeedback > 0? (good - bad)/totalFeedback : 0} />
+        <StatisticLine text="Positive" value={totalFeedback > 0? (good/totalFeedback)*100 + '%' : 0 + '%'} />
       </div>
     )
   } else {
