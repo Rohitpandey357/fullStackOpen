@@ -10,13 +10,27 @@ const Button = (props) => {
 
 const DisplayFeedback = (props) => <p>{props.text} {props.value}</p>
 
+const Statistics = (props) => {
+  const {good, neutral, bad} = props;
+  const totalFeedback = good + neutral + bad;
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <DisplayFeedback text="Good" value={good} />
+      <DisplayFeedback text="Neutral" value={neutral} />
+      <DisplayFeedback text="Bad" value={bad} />
+      <DisplayFeedback text="All" value={totalFeedback} />
+      <DisplayFeedback text="Average" value={totalFeedback > 0? (good - bad)/totalFeedback : 0} />
+      <DisplayFeedback text="Positive" value={totalFeedback > 0? (good/totalFeedback)*100 + '%' : 0 + '%'} />
+    </div>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const totalFeedback = good + neutral + bad;
 
   // console.log(good, neutral, bad)
   return (
@@ -25,13 +39,7 @@ const App = () => {
       <Button text="Good" onClick={() => setGood(good + 1)} />
       <Button text="Neutral" onClick={() => setNeutral(neutral + 1)} />
       <Button text="Bad" onClick={() => setBad(bad + 1)} />
-      <h1>Statistics</h1>
-      <DisplayFeedback text="Good" value={good} />
-      <DisplayFeedback text="Neutral" value={neutral} />
-      <DisplayFeedback text="Bad" value={bad} />
-      <DisplayFeedback text="All" value={totalFeedback} />
-      <DisplayFeedback text="Average" value={totalFeedback > 0? (good - bad)/totalFeedback : 0} />
-      <DisplayFeedback text="Positive" value={totalFeedback > 0? good/totalFeedback + '%' : 0 + '%'} />
+      <Statistics good={good} bad ={bad} neutral={neutral} />
     </div>
   )
 }
