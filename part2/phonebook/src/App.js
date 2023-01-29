@@ -16,8 +16,12 @@ const App = () => {
 
   const handleAddPerson = (event) => {
     event.preventDefault()
-    const person = { name: newName }
-    setPersons([...persons, person])
+    if (persons.find(person => person.name === newName)) {
+      alert(`${newName} is already in the list`)
+    } else {
+      const person = { name: newName }
+      setPersons([...persons, person])
+    }
     setNewName('')
   }
 
@@ -31,7 +35,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form>
         <div>
-          name: <input onChange={handleChangeInput} />
+          name: <input id="inputName" onChange={handleChangeInput} />
         </div>
         <div>
           <button type="submit" onClick={handleAddPerson}>add</button>
