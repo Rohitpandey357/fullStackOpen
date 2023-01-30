@@ -10,8 +10,8 @@ const PersonForm = (props) => {
         <form>
             <div> name: <input type="text" value={newName} onChange={handleChangedNameInput} />
             <br />
-            number: <input type="number" value={newNumber} onChange={handleChangedNumberInput} /></div>
-            <div>
+            number: <input type="number" value={newNumber} onChange={handleChangedNumberInput} required />
+            <br />
             <button type="submit" onClick={handleAddPerson}>add</button>
             </div>
         </form>

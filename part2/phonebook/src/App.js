@@ -6,18 +6,22 @@ import PersonForm from './components/Personform'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  const baseUrl = 'http://localhost:3001/persons'
 
   //handles the case where form is submitted
   const handleAddPerson = (event) => {
     event.preventDefault()
     if (persons.find(person => person.name === newName)) {
       alert(`${newName} is already in the list`)
+    } else if (newNumber === '' || newName === '') {
+      alert('Enter a name and a number')
     } else {
       const person = { name: newName, number: newNumber}
+      axios.post(baseUrl, person)
       setPersons([...persons, person])
     }
     setNewName('')
