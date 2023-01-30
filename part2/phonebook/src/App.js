@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/Personform'
+import Notification from './components/Notification'
 import PhoneBookService from './services/PhoneBookService'
 
 const App = () => {
@@ -9,8 +10,9 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [message, setMessage] = useState('')
 
-  //handles the case where form is submitted
+  //handles the case when form is submitted
   const handleAddPerson = (event) => {
     event.preventDefault()
     if (persons.find(person => person.name === newName)) {
@@ -20,9 +22,11 @@ const App = () => {
         PhoneBookService
         .updatePerson(updatedPerson)
         .then(res => setPersons(
-            persons.map(person => 
-            person.id === id? updatedPerson : person)))
+        persons.map(person => 
+        person.id === id? updatedPerson : person)))
+        .catch(err => setMessage("Something went wrong"));
       }
+      setMessage('Updated the number Successfully')
     } else if (newNumber === '' || newName === '') {
       alert('Enter a name and a number')
     } else {
@@ -30,26 +34,33 @@ const App = () => {
       PhoneBookService
       .create(person)
       .then(newPerson => setPersons([...persons, newPerson]))
+      .catch(err => setMessage("Something went wrong"));
+      setMessage('Added the number Successfully')
     }
     setNewName('')
     setNewNumber('')
+    setTimeout(() => setMessage(null), 5000);
   }
+
 
   //handles the case where user is typing a name in input
   const handleChangedNameInput = (event) => {
     setNewName(event.target.value);
   }
 
+
   //handles the case where user is typing a number in input
   const handleChangedNumberInput = (event) => {
     setNewNumber(event.target.value);
   }
+
 
   //handles the case where user is searching for a person
   const handleChangedSearch = (event) => {
     setSearch(event.target.value);
     console.log(event.target.value);
   }
+
 
   // deletes a record
   const handleDelete = (event) => {
@@ -61,10 +72,13 @@ const App = () => {
           .id)
           .then(() => setPersons(
             persons.filter(person => person.name!== event.target.value)
-            ))
+            )).catch(err => setMessage("Something went wrong"))
+        setMessage('Deleted the person Successfully')
+        setTimeout(() => setMessage(null), 5000);
      }
   }
   
+
   //fetching data from the database 
   useEffect(() => {
     console.log('Inside useEffect');
@@ -73,10 +87,11 @@ const App = () => {
     .then(initialPersons => setPersons(initialPersons))
   }, [])
   
+
   return (
     <div>
       <h2>Phonebook</h2>
-      
+      <Notification message={message} />
       <Filter search={search} handleChangedSearch={handleChangedSearch} />
 
       <PersonForm handleAddPerson={handleAddPerson} newName={newName} newNumber={newNumber} handleChangedNameInput={handleChangedNameInput} handleChangedNumberInput={handleChangedNumberInput} />
