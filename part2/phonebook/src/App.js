@@ -44,6 +44,20 @@ const App = () => {
     setSearch(event.target.value);
     console.log(event.target.value);
   }
+
+  // deletes a record
+  const handleDelete = (event) => {
+    if(window.confirm("Do you really want to delete this person?")) {
+        PhoneBookService
+        .deletePerson(
+          persons
+          .find(person => person.name === event.target.value)
+          .id)
+          .then(() => setPersons(
+            persons.filter(person => person.name!== event.target.value)
+            ))
+     }
+  }
   
   //fetching data from the database 
   useEffect(() => {
@@ -52,7 +66,8 @@ const App = () => {
     .getAll()
     .then(initialPersons => setPersons(initialPersons))
   }, [])
-
+  
+  console.log(persons)
   return (
     <div>
       <h2>Phonebook</h2>
@@ -68,7 +83,7 @@ const App = () => {
                 a.name.toLowerCase()
                 .startsWith(search.toLowerCase()))
                 .map(person => (
-                  <Person key={person.name} name={person.name} number={person.number} />
+                  <Person key={person.name} name={person.name} number={person.number} handleDelete={handleDelete} />
                 ))
         }
       </ul>
