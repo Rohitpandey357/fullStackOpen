@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/Personform'
+import PhoneBookService from './services/PhoneBookService'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
-
-  const baseUrl = 'http://localhost:3001/persons'
 
   //handles the case where form is submitted
   const handleAddPerson = (event) => {
@@ -21,8 +19,9 @@ const App = () => {
       alert('Enter a name and a number')
     } else {
       const person = { name: newName, number: newNumber}
-      axios.post(baseUrl, person)
-      setPersons([...persons, person])
+      PhoneBookService
+      .create(person)
+      .then(newPerson => setPersons([...persons, newPerson]))
     }
     setNewName('')
     setNewNumber('')
@@ -49,9 +48,9 @@ const App = () => {
   //fetching data from the database 
   useEffect(() => {
     console.log('Inside useEffect');
-    axios
-    .get('http://localhost:3001/persons')
-    .then(res => setPersons(res.data))
+    PhoneBookService
+    .getAll()
+    .then(initialPersons => setPersons(initialPersons))
   }, [])
 
   return (
