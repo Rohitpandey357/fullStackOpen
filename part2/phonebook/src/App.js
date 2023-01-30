@@ -14,7 +14,15 @@ const App = () => {
   const handleAddPerson = (event) => {
     event.preventDefault()
     if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already in the list`)
+      if(window.confirm('Are you sure you want to replace this number?')) {
+        const id = persons.find(person => person.name === newName).id
+        const updatedPerson = { name: newName, number: newNumber, id: id }
+        PhoneBookService
+        .updatePerson(updatedPerson)
+        .then(res => setPersons(
+            persons.map(person => 
+            person.id === id? updatedPerson : person)))
+      }
     } else if (newNumber === '' || newName === '') {
       alert('Enter a name and a number')
     } else {
@@ -30,13 +38,11 @@ const App = () => {
   //handles the case where user is typing a name in input
   const handleChangedNameInput = (event) => {
     setNewName(event.target.value);
-    console.log(event.target.value);
   }
 
   //handles the case where user is typing a number in input
   const handleChangedNumberInput = (event) => {
     setNewNumber(event.target.value);
-    console.log(event.target.value);
   }
 
   //handles the case where user is searching for a person
@@ -67,7 +73,6 @@ const App = () => {
     .then(initialPersons => setPersons(initialPersons))
   }, [])
   
-  console.log(persons)
   return (
     <div>
       <h2>Phonebook</h2>
