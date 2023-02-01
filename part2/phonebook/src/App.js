@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [message, setMessage] = useState('')
+  const [notificationClass, setNotificationClass] = useState('')
 
   //handles the case when form is submitted
   const handleAddPerson = (event) => {
@@ -24,9 +25,16 @@ const App = () => {
         .then(res => setPersons(
         persons.map(person => 
         person.id === id? updatedPerson : person)))
-        .catch(err => setMessage("Something went wrong"));
+        .then(() => {
+          setNotificationClass('notification')
+          return setMessage('Updated the number Successfully')
+        })
+        .catch(err => {
+          setNotificationClass('errorMessage')
+          return setMessage("Something went wrong");
+        });
       }
-      setMessage('Updated the number Successfully')
+      
     } else if (newNumber === '' || newName === '') {
       alert('Enter a name and a number')
     } else {
@@ -34,8 +42,14 @@ const App = () => {
       PhoneBookService
       .create(person)
       .then(newPerson => setPersons([...persons, newPerson]))
-      .catch(err => setMessage("Something went wrong"));
-      setMessage('Added the number Successfully')
+      .then(() => {  
+        setNotificationClass('notification')
+        return setMessage('Added the number Successfully')
+      })
+      .catch(err => {
+        setNotificationClass('errorMessage')
+        return setMessage("Something went wrong");
+      });
     }
     setNewName('')
     setNewNumber('')
@@ -66,14 +80,17 @@ const App = () => {
   const handleDelete = (event) => {
     if(window.confirm("Do you really want to delete this person?")) {
         PhoneBookService
-        .deletePerson(
-          persons
-          .find(person => person.name === event.target.value)
-          .id)
+        .deletePerson(persons
+          .find(person => person.name === event.target.value).id)
           .then(() => setPersons(
             persons.filter(person => person.name!== event.target.value)
-            )).catch(err => setMessage("Something went wrong"))
-        setMessage('Deleted the person Successfully')
+            )).then(() => {
+              setNotificationClass('notification')
+              return setMessage('Deleted the person Successfully')
+            }).catch(err => {
+              setNotificationClass('errorMessage')
+              return setMessage("Something went wrong");
+            })
         setTimeout(() => setMessage(null), 5000);
      }
   }
@@ -91,7 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} className={notificationClass} />
       <Filter search={search} handleChangedSearch={handleChangedSearch} />
 
       <PersonForm handleAddPerson={handleAddPerson} newName={newName} newNumber={newNumber} handleChangedNameInput={handleChangedNameInput} handleChangedNumberInput={handleChangedNumberInput} />
