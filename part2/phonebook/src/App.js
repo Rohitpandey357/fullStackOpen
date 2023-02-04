@@ -124,7 +124,8 @@ const App = () => {
                 ))
         }
       </ul>
-
+      
+      <footer>Phonebook App, Created by Rohit Pandey with love ♥</footer>
     </div>
   )
 
