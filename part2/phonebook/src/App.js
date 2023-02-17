@@ -104,6 +104,11 @@ const App = () => {
     .then(initialPersons => setPersons(initialPersons))
   }, [])
   
+  let personsToDisplay = persons;
+
+  if(search.length > 0) {
+    personsToDisplay = personsToDisplay.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
+  }
 
   return (
     <div>
@@ -116,12 +121,11 @@ const App = () => {
       <h2>Numbers</h2>
       
       <ul>
-        {persons.filter((a) => 
-                a.name.toLowerCase()
-                .startsWith(search.toLowerCase()))
-                .map(person => (
-                  <Person key={person.name} name={person.name} number={person.number} handleDelete={handleDelete} />
-                ))
+        {
+          personsToDisplay
+            .map(person => (
+                  <Person key={person.id} name={person.name} number={person.number} handleDelete={handleDelete} />
+            ))
         }
       </ul>
       
